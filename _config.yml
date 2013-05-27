@@ -1,0 +1,11 @@
+
+
+safe: true
+
+exclude:
+  - README.md
+
+## NB: use kramdown
+markdown: kramdown
+
+

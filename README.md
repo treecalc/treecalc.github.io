@@ -1,4 +1,5 @@
-treecalc.github.io
-==================
+# treecalc.github.io
 
-TreeCalc - Tree Organized Calculations
+TreeCalc - Tree Organized Calculations - Project Website
+
+
