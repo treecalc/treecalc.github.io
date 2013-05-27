@@ -27,6 +27,9 @@ and business rules. The most important features are:
 
 ## Talks - Slide Decks
 
+- [TreeCalc Virtual Machine Intro](talks/treecalc-vm-intro.html) [[PDF]](talks/treecalc-vm-intro.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012), 28.6.2012
+
+
 TBD
 
 
