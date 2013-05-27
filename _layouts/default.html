@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <meta charset='utf-8'>
    <title>{{ page.title }} / TreeCalc - Tree Organized Calculations</title>
 </head>
 <body>
@@ -10,6 +9,46 @@
 <div id='content'>
   {{ content }}
 </div>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset='utf-8'>
+   <title>{{ page.title }} / TreeCalc - Tree Organized Calculations</title>
+   <link rel='stylesheet' href='treecalc.css' type='text/css'>
+</head>
+<body>
+
+  <div id='header'>
+    <span class='big'>TreeCalc</span>
+    <span class='small'>Tree Organized Calculations in Java or JavaScript</span>
+  </div>
+
+  <div id='nav'>
+   
+    <a href='index.html'>Home</a> |
+<!--
+    <a href="tutorial.html">10-Minute Quick Start Guide</a> |
+    <a href="more.html">Settings, Tips, Tricks and More</a> |
+    <a href="plugins.html">Plugins, Helpers</a> |    
+    <a href="code.html">Syntax Highlighting</a> |
+    <a href="templates.html">Template Pack Gallery</a> | 
+    <a href="themes.html">Gradient Themes</a> |
+ -->
+    <a href='https://github.com/treecalc">Source, Repos</a>
+     
+  </div>
+    
+    <div id='content'>
+      {{ content }}
+      
+      {% include editme.html %}
+      
+    </div>
 
 </body>
 </html>
