@@ -16,38 +16,43 @@ Examples would be '{' or '}' or '(' or ')'
 ## Language Spec / Grammar
 
 
-compilationunit : ( def )+ -> ^( TT_COMPUNIT ( def )* ) ;
+compilationunit : ( def )+
 
 
 def : (  
-  __TREE__ nodepath '{' ( nodeinfo )* '}' -> ^( __TREE__ nodepath ( nodeinfo )* ) |  
-  __CALC__ nodepath '{' ( resultdef )* '}' -> ^( __CALC__ nodepath ( resultdef )* ) |  
-  __INPUT__ id ( ( '{' ( resultdef )* '}' ) | ';' ) -> ^( __INPUT__ id ( resultdef )* ) |  
-  __FUNC__ resultdef -> ^( __FUNC__ resultdef ) |  
-  __TABLE__ id '(' colnames ')' '{' ( tableline )* '}' -> ^( __TABLE__ id colnames ( tableline )* ) );
+  __TREE__ nodepath '{' ( nodeinfo )* '}' |  
+  __CALC__ nodepath '{' ( resultdef )* '}' |  
+  __INPUT__ id ( ( '{' ( resultdef )* '}' ) | ';' ) |  
+  __FUNC__ resultdef |  
+  __TABLE__ id '(' colnames ')' '{' ( tableline )* '}'  
+  )
 
 
-nodeinfo :  
-  ( __NODE__ nodename ( __AS__ id )? ( nodeinclusion )? ( nodetimes )? ( ';' | ( '{' ( nodeinfo )* '}' ) ) -> ^( __NODE__ nodename ( ^( __AS__ id ) )? ( nodeinclusion )? ( nodetimes )? ( nodeinfo )* ) | __LINK__ linkpath ';' -> ^( __LINK__ linkpath ) );
+nodeinfo : (
+  __NODE__ nodename ( __AS__ id )? ( nodeinclusion )? ( nodetimes )? ( ';' | ( '{' ( nodeinfo )* '}' ) ) |  
+  __LINK__ linkpath ';'  
+  )
 
 
 nodeinclusion :  
-  kw= __IF__ formula -> ^( TT_INCLUSIONFORMULA[$kw] formula ) ;
+  __IF__ formula
 
 
 nodetimes :  
-  kw= __TIMES__ formula __AS__ id -> ^( TT_TIMESINFO[$kw] formula id ) ;
+  __TIMES__ formula __AS__ id
 
 
 resultdef :  
-  id ( arguments )? COMPARE_EQUAL formula ';' -> ^( TT_RESULTDEF id ( arguments )? formula ) ;
+  id ( arguments )? '=' formula ';'
 
 
 arguments :  
-  '(' id ( ',' id )* ')' -> ^( TT_ARGDEF ( id )* ) ;
+  '(' id ( ',' id )* ')'
 
 
-id : ( ID -> ID |kw= keywordAsId -> ID[((CommonTree)kw.tree).getText()] );
+id :  ID
+
+
 
 
 keywordAsId : ( __AS__ | __TABLE__ | __TREE__ | __CALC__ | __INPUT__ | __FUNC__ | __NODE__ | __IF__ | __THEN__ | __ELSE__ | __ENDIF__ | __CASE__ | __WHEN__ | __DEFAULT__ | __ENDCASE__ |
@@ -184,7 +189,7 @@ dyntable : KEYWORD_TABREF '(' formula ')' -> formula ;
 columnaccess : ( DOT id -> ^( TT_COLNAMESTATIC id ) | '(' formula ')' -> ^( TT_COLNAMEFORMULA formula ) );
 
 
-comparisonoperator : ( COMPARE_EQUAL | COMPARE_EQUAL_CSTYLE | COMPARE_SMALLER | COMPARE_BIGGER | COMPARE_LESSEQUAL | COMPARE_BIGGEREQUAL | COMPARE_NOTEQUAL | COMPARE_NOTEQUAL_CSTYLE | COMPARE_STR_EQUAL | COMPARE_STR_NOTEQUAL | COMPARE_STR_ALIKE | COMPARE_STR_NOTALIKE | COMPARE_STR_BEFORE | COMPARE_STR_NOTBEFORE | COMPARE_STR_AHEAD | COMPARE_STR_NOTAHEAD | COMPARE_STR_BEHIND | COMPARE_STR_NOTBEHIND | COMPARE_STR_AFTER | COMPARE_STR_NOTAFTER );
+comparisonoperator : ( '=' | '='_CSTYLE | COMPARE_SMALLER | COMPARE_BIGGER | COMPARE_LESSEQUAL | COMPARE_BIGGEREQUAL | COMPARE_NOTEQUAL | COMPARE_NOTEQUAL_CSTYLE | COMPARE_STR_EQUAL | COMPARE_STR_NOTEQUAL | COMPARE_STR_ALIKE | COMPARE_STR_NOTALIKE | COMPARE_STR_BEFORE | COMPARE_STR_NOTBEFORE | COMPARE_STR_AHEAD | COMPARE_STR_NOTAHEAD | COMPARE_STR_BEHIND | COMPARE_STR_NOTBEHIND | COMPARE_STR_AFTER | COMPARE_STR_NOTAFTER );
 
 
 parameterListe : '(' ( formula ( ',' formula )* )? ')' -> ^( TT_PARAMETERS ( formula )* ) ;
