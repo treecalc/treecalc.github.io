@@ -22,15 +22,19 @@ and business rules. The most important features are:
 * JavaScript test calculator
 
 
+## Compiler
+
+[More info »](https://treecalc.github.io/treecalc/compiler)  [[API Docs/Javadocs]](javadocs/compiler)
+
 
 ## Virtual Machine
 
-[More info »](https://treecalc.github.io/treecalc/virtual-machine)  [API Docs/Javadocs](javadocs/virtual-machine)
+[More info »](https://treecalc.github.io/treecalc/virtual-machine)  [[API Docs/Javadocs]](javadocs/virtual-machine)
 
 
 ## Runtime 
 
-[More info »](https://treecalc.github.io/treecalc/runtime-java)  [API Docs/Javadocs](javadocs/runtime)
+[More info »](https://treecalc.github.io/treecalc/runtime-java)  [[API Docs/Javadocs]](javadocs/runtime)
 
 
 
