@@ -6,7 +6,7 @@ title: Welcome
 
 ## What is TreeCalc?
 
-TreeCalc is a programming language with focus on calculations
+TreeCalc is a programming language with a focus on calculations
 and business rules. The most important features are:
 
 * easy to learn
@@ -77,8 +77,6 @@ FUNC F_testfunny(i) = P_Mult(i);
 
 ## Compiler
 
-[[API Docs/Javadocs]](javadocs/compiler)
-
 TreeCalc Compiler - code generator for:
 
 1. Java
@@ -86,9 +84,9 @@ TreeCalc Compiler - code generator for:
 3. TreeCalc Bytecode / TreeCalc Virtual Machine
 
 
-[More info »](https://github.com/treecalc/compiler)  
+[More info »](https://github.com/treecalc/compiler)  |  [API Docs/Javadocs](javadocs/compiler)
 
-### Intermediate Language (`.tci`) / TreeCall Assembler
+### Intermediate Language (`.tci`) / TreeCalc Assembler
 
 Sample:
 
@@ -115,9 +113,7 @@ TBD
 
 ## Virtual Machine
 
-[[API Docs/Javadocs]](javadocs/virtual-machine)
-
-[More info »](https://github.com/treecalc/virtual-machine)
+[More info »](https://github.com/treecalc/virtual-machine)  |  [API Docs/Javadocs](javadocs/virtual-machine)
 
 
 ### Instructions / Bytecode (`.tcx`)
@@ -137,16 +133,14 @@ TBD
 
 ## Runtime 
 
-[[API Docs/Javadocs]](javadocs/runtime)
+Standard runtime classes:
 
-Base classes:
-
-– Values: V, VString, VDouble, VList, ...
-– TreeCalc standard functions
-– Table access functions
+- Values: `V`, `VString`, `VDouble`, `VList`, ...
+- TreeCalc standard functions
+- Table access functions
 
 
-[More info »](https://github.com/treecalc/runtime-java)
+[More info »](https://github.com/treecalc/runtime-java)  |  [API Docs/Javadocs](javadocs/runtime)
 
 
 
@@ -157,5 +151,4 @@ Base classes:
 - [Adaptive Memoization in the TreeCalc VM](talks/treecalc-vm-adaptive-memoization.html)  [[PDF]](talks/treecalc-vm-adaptive-memoization.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012),
 
 TBD
-
 
