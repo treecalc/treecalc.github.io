@@ -22,6 +22,11 @@ and business rules. The most important features are:
 * JavaScript test calculator
 
 
+
+## Language - TreeCall Source Language (`.tcs`)
+
+[TreeCall Language Specification](lang/spec.html) - Spec, Grammar
+
 Sample:
 
 ~~~
@@ -70,34 +75,86 @@ FUNC F_testfunny(i) = P_Mult(i);
 ~~~
 
 
-
-## Language
-
-[TreeCall Language Specification](lang/spec.html) - Spec, Grammar
-
-
 ## Compiler
 
-[More info »](https://github.com/treecalc/compiler)  [[API Docs/Javadocs]](javadocs/compiler)
+[[API Docs/Javadocs]](javadocs/compiler)
+
+TreeCalc Compiler - code generator for:
+
+1. Java
+2. JavaScript
+3. TreeCalc Bytecode / TreeCalc Virtual Machine
+
+
+[More info »](https://github.com/treecalc/compiler)  
+
+### Intermediate Language (`.tci`) / TreeCall Assembler
+
+Sample:
+
+~~~
+.formula formula=506 simple=false ; line 3182
+   //start of if statement, line 3182
+   : callfunc 65 0 ; F_LI_INDEXATION_PERC
+   : pushconst 0
+   : cmpbig
+   : iffalse L0
+   : callfunc 90 0 ; F_LI_TARIFFDURATION
+   : goto L1
+  L0:
+   : pushconst 1
+  L1:
+   //end of if statement
+   : return
+.formuladone
+~~~
+
+TBD
+
 
 
 ## Virtual Machine
 
-[More info »](https://github.com/treecalc/virtual-machine)  [[API Docs/Javadocs]](javadocs/virtual-machine)
+[[API Docs/Javadocs]](javadocs/virtual-machine)
+
+[More info »](https://github.com/treecalc/virtual-machine)
+
+
+### Instructions / Bytecode (`.tcx`)
+
+Sample:
+
+~~~
+case INSTR_ADD: //a b -- a+b
+  stack[sp-1] = V.getInstance(stack[sp-1].doubleValue() + stack[sp].doubleValue());
+  stack[sp--] = null;
+  break;
+~~~
+
+
+TBD
 
 
 ## Runtime 
 
-[More info »](https://github.com/treecalc/runtime-java)  [[API Docs/Javadocs]](javadocs/runtime)
+[[API Docs/Javadocs]](javadocs/runtime)
+
+Base classes:
+
+– Values: V, VString, VDouble, VList, ...
+– TreeCalc standard functions
+– Table access functions
+
+
+[More info »](https://github.com/treecalc/runtime-java)
+
 
 
 
 ## Talks - Slide Decks
 
-- [TreeCalc Virtual Machine Intro](talks/treecalc-vm-intro.html) [[PDF]](talks/treecalc-vm-intro.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012), 28.6.2012
-- [TreeCalc Virtaul Machine Adaptive Memoization](talks/treecalc-vm-adaptive-memoization.html)  [[PDF]](talks/treecalc-vm-adaptive-memoization.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012),
-
-
+- [TreeCalc Virtual Machine](talks/treecalc-vm-intro.html) [[PDF]](talks/treecalc-vm-intro.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012), 28.6.2012
+- [Adaptive Memoization in the TreeCalc VM](talks/treecalc-vm-adaptive-memoization.html)  [[PDF]](talks/treecalc-vm-adaptive-memoization.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012),
 
 TBD
 
