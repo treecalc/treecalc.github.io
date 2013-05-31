@@ -22,19 +22,73 @@ and business rules. The most important features are:
 * JavaScript test calculator
 
 
+Sample:
+
+~~~
+TREE mytree {
+  NODE m {
+    NODE maincomputes {
+      NODE sub1;
+      NODE sub2;
+      NODE sub3 {
+        NODE sub31;
+        NODE sub32;
+      }
+    }
+    NODE optional_init;
+    NODE optional IF I_INCLUDE_LEVEL1 {
+      NODE opt1;
+      NODE opt2 IF I_include_level2;
+    }
+    NODE funny;
+  }
+  NODE n IF I_include_level1;
+  NODE z {
+      NODE zsub;
+  }
+}
+
+INPUT I_INCLUDE_LEVEL1;
+INPUT I_include_level2;
+CALC mytree.n {
+  P_n = "n";
+}
+CALC mytree.z {
+    P_z = "z";
+    P_fac(n) = n<=0 ? 1 : P_Fac(n-1) * n ;
+    P_zsub = P_zsub;
+}                   
+CALC mytree.z.zsub {
+    P_zsub = 1;
+}
+CALC mytree.m.funny {
+    P_Mult(i) = i;
+    P_Mult2(ind) = P_Mult(ind);
+}
+
+FUNC F_testfunny(i) = P_Mult(i);
+~~~
+
+
+
+## Language
+
+[Grammar](lang/grammar.index)
+
+
 ## Compiler
 
-[More info »](https://treecalc.github.io/treecalc/compiler)  [[API Docs/Javadocs]](javadocs/compiler)
+[More info »](https://github.com/treecalc/compiler)  [[API Docs/Javadocs]](javadocs/compiler)
 
 
 ## Virtual Machine
 
-[More info »](https://treecalc.github.io/treecalc/virtual-machine)  [[API Docs/Javadocs]](javadocs/virtual-machine)
+[More info »](https://github.com/treecalc/virtual-machine)  [[API Docs/Javadocs]](javadocs/virtual-machine)
 
 
 ## Runtime 
 
-[More info »](https://treecalc.github.io/treecalc/runtime-java)  [[API Docs/Javadocs]](javadocs/runtime)
+[More info »](https://github.com/treecalc/runtime-java)  [[API Docs/Javadocs]](javadocs/runtime)
 
 
 
