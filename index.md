@@ -77,14 +77,14 @@ FUNC F_testfunny(i) = P_Mult(i);
 
 ## Compiler
 
-TreeCalc Compiler - code generator for:
+TreeCalc Compiler - code generation for:
 
 1. Java
 2. JavaScript
 3. TreeCalc Bytecode / TreeCalc Virtual Machine
 
 
-[More info »](https://github.com/treecalc/compiler)  |  [API Docs/Javadocs](javadocs/compiler)
+[More info »](https://github.com/treecalc/compiler)  \|  [API Docs/Javadocs](javadocs/compiler)
 
 ### Intermediate Language (`.tci`) / TreeCalc Assembler
 
@@ -113,7 +113,7 @@ TBD
 
 ## Virtual Machine
 
-[More info »](https://github.com/treecalc/virtual-machine)  |  [API Docs/Javadocs](javadocs/virtual-machine)
+[More info »](https://github.com/treecalc/virtual-machine)  \|  [API Docs/Javadocs](javadocs/virtual-machine)
 
 
 ### Instructions / Bytecode (`.tcx`)
@@ -140,7 +140,7 @@ Standard runtime classes:
 - Table access functions
 
 
-[More info »](https://github.com/treecalc/runtime-java)  |  [API Docs/Javadocs](javadocs/runtime)
+[More info »](https://github.com/treecalc/runtime-java)  \|  [API Docs/Javadocs](javadocs/runtime)
 
 
 
