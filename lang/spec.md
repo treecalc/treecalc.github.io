@@ -1,6 +1,6 @@
 ---
 layout: default
-title: TreeCalc Language Spec
+title: TreeCalc Language Specification
 ---
 
 
@@ -13,7 +13,11 @@ Punctuation tokens appear in quotes.
 Examples would be '{' or '}' or '(' or ')'
 
 
-## Language Spec / Grammar
+## Language Specification / Grammar
+
+
+> To Iterate Is Human, To Recurse Divine    - Peter Deutsch
+
 
 
 compilationunit : ( def )+
@@ -55,13 +59,14 @@ id :  ID
 
 
 
-keywordAsId : ( __AS__ | __TABLE__ | __TREE__ | __CALC__ | __INPUT__ | __FUNC__ | __NODE__ | __IF__ | __THEN__ | __ELSE__ | __ENDIF__ | __CASE__ | __WHEN__ | __DEFAULT__ | __ENDCASE__ |
-  __COLLATE__ | __EXTRACT__ |
-  __SUMX__ | __PRODX__ | __VEXTORX__ | __CELL__ | __CELLX__ | __EXISTS__ | __INTERPOL__ |
+keywordAsId : (  
+  __AS__ | __TABLE__ | __TREE__ | __CALC__ | __INPUT__ | __FUNC__ | __NODE__ | __IF__ | __THEN__ | __ELSE__ | __ENDIF__ | __CASE__ | __WHEN__ | __DEFAULT__ | __ENDCASE__ |
+  __collate__ | __extract__ |
+  __sumx__ | __prodx__ | __vectorx__ | __cell__ | __cellx__ | __exists__ | __INTERPOL__ |
   __TABCOLS__ | __TABROWS__ |
   __LOOKUP__ | __LOOKUPX__ | __LOOKDOWNX__ |
-  __FUNCREF__ | __DOCCALL__ | __COUNTERLIST__
-  );
+  __FUNCREF__ | __DOCCALL__ | __COUNTERLIST__  
+  )
 
 
 constantorid : ( constant | id );
@@ -124,39 +129,43 @@ formula9 : formula10 ( POWER ^ formula9 )? ;
 formula10 : ( PLUS ^| MINUS ^)* expression ;
 
 
-expression : ( '(' ! formula ')' !| __SUMX__ '(' id ',' formula ',' formula ',' formula ')' -> ^( __SUMX__ id ( formula )* ) |  
-  __PRODX__ '(' id ',' formula ',' formula ',' formula ')' -> ^( __PRODX__ id ( formula )* ) |  
-  __VEXTORX__ '(' id ',' formula ',' formula ',' formula ')' -> ^( __VEXTORX__ id ( formula )* ) |  
-  __COLLATE__ '(' id ( '(' formula ( ',' formula )* ')' )? ')' -> ^( __COLLATE__ id ( formula )* ) |  
-  __EXTRACT__ '(' id ( '(' formula ( ',' formula )* ')' )? ',' formula ')' -> ^( __EXTRACT__ id ( formula )* ) |  
-  __CELL__ '(' tableref ',' range ',' range ')' -> ^( __CELL__ tableref ( range )* ) |  
-  __CELLX__ '(' tableref ',' range ',' range ')' -> ^( __CELLX__ tableref ( range )* ) |  
-  __LOOKUP__ '(' tableref ',' formula ')' -> ^( __LOOKUP__ tableref ( formula )* ) |  
-  __LOOKUPX__ '(' tableref ',' formula ( ',' formula )* ')' -> ^( __LOOKUPX__ tableref ( formula )* ) |  
-  __LOOKDOWNX__ '(' tableref ',' formula ( ',' formula )* ')' -> ^( __LOOKDOWNX__ tableref ( formula )* ) |  
-  __EXISTS__ '(' tableref ',' formula ( ',' formula )* ')' -> ^( __EXISTS__ tableref ( formula )* ) |  
-  __INTERPOL__ '(' tableref ',' formula ')' -> ^( __INTERPOL__ tableref formula ) |  
-  __TABCOLS__ '(' tableref ')' -> ^( __TABCOLS__ tableref ) |  
-  __TABROWS__ '(' tableref ')' -> ^( __TABROWS__ tableref ) |  
-  __FUNC__REF '(' formula ')' -> ^( __FUNC__REF formula ) |  
-  __DOCCALL__ '(' formula ( ',' formula )* ')' -> ^( __DOCCALL__ ( formula )* ) |  
-  __COUNTERLIST__ '(' id ( ',' id )* ')' -> ^( __COUNTERLIST__ ( id )* ) |  
-  ID -> ^( TT_USEID ID ) |  
-  ID DOT id -> ^( TT_INPUTCALCCALLSIMPLE ID id ) |  
-  ID index ( columnaccess )? -> ^( TT_INPUTORTABACCESSWITHINDEX ID index ( columnaccess )? ) |  
-  dyntable ( index ( columnaccess )? )? -> ^( TT_DYNTABLE dyntable ( index )? ( columnaccess )? ) |  
-  ID parameterListe -> ^( TT_FUNORCALCCALL ID parameterListe ) |  
-  ifstmt | casestmt | constant  
-  );
+expression : (
+  '(' ! formula ')' !| __sumx__ '(' id ',' formula ',' formula ',' formula ')' |  
+  __prodx__ '(' id ',' formula ',' formula ',' formula ')' |  
+  __vectorx__ '(' id ',' formula ',' formula ',' formula ')' |  
+  __collate__ '(' id ( '(' formula ( ',' formula )* ')' )? ')' |  
+  __extract__ '(' id ( '(' formula ( ',' formula )* ')' )? ',' formula ')' |  
+  __cell__ '(' tableref ',' range ',' range ')' |  
+  __cellx__ '(' tableref ',' range ',' range ')' |  
+  __LOOKUP__ '(' tableref ',' formula ')' |  
+  __LOOKUPX__ '(' tableref ',' formula ( ',' formula )* ')' |  
+  __LOOKDOWNX__ '(' tableref ',' formula ( ',' formula )* ')' |  
+  __exists__ '(' tableref ',' formula ( ',' formula )* ')' |  
+  __INTERPOL__ '(' tableref ',' formula ')' |  
+  __TABCOLS__ '(' tableref ')' |  
+  __TABROWS__ '(' tableref ')' |  
+  __FUNC__REF '(' formula ')' |  
+  __DOCCALL__ '(' formula ( ',' formula )* ')' |  
+  __COUNTERLIST__ '(' id ( ',' id )* ')' |  
+  ID |  
+  ID DOT id |  
+  ID index ( columnaccess )? |  
+  dyntable ( index ( columnaccess )? )? |  
+  ID parameterListe |  
+  ifstmt |  
+  casestmt |  
+  constant  
+  )
 
 
-tableref : ( id | dyntable );
+tableref : ( id | dyntable )
 
 
-range : formula ( DOTS formula )? -> ^( TT_RANGE ( formula )* ) ;
+range : formula ( DOTS formula )?
 
 
-ifstmt : __IF__ formula __THEN__ formula __ELSE__ formula __ENDIF__ -> ^( __IF__ ( formula )* ) ;
+ifstmt :  
+  __IF__ formula __THEN__ formula __ELSE__ formula __ENDIF__
 
 
 casestmt : __CASE__ formula ( casewhen )* ( casedefault )? __ENDCASE__ -> ^( __CASE__ formula ( casewhen )* ( casedefault )? ) ;
