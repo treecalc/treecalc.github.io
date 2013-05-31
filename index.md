@@ -73,7 +73,7 @@ FUNC F_testfunny(i) = P_Mult(i);
 
 ## Language
 
-[Grammar](lang/grammar.index)
+[Grammar](lang/grammar.html)
 
 
 ## Compiler

@@ -1,3 +1,8 @@
+---
+layout: default
+title: TreeCalc Language Spec
+---
+
 
 ## Notation
 
@@ -14,7 +19,7 @@ Examples would be '{' or '}' or '(' or ')'
 compilationunit : ( def )+ -> ^( TT_COMPUNIT ( def )* ) ;
 
 
-def : (
+def : (  
   __TREE__ nodepath '{' ( nodeinfo )* '}' -> ^( __TREE__ nodepath ( nodeinfo )* ) |  
   __CALC__ nodepath '{' ( resultdef )* '}' -> ^( __CALC__ nodepath ( resultdef )* ) |  
   __INPUT__ id ( ( '{' ( resultdef )* '}' ) | ';' ) -> ^( __INPUT__ id ( resultdef )* ) |  
@@ -22,32 +27,42 @@ def : (
   __TABLE__ id '(' colnames ')' '{' ( tableline )* '}' -> ^( __TABLE__ id colnames ( tableline )* ) );
 
 
-nodeinfo :
+nodeinfo :  
   ( __NODE__ nodename ( __AS__ id )? ( nodeinclusion )? ( nodetimes )? ( ';' | ( '{' ( nodeinfo )* '}' ) ) -> ^( __NODE__ nodename ( ^( __AS__ id ) )? ( nodeinclusion )? ( nodetimes )? ( nodeinfo )* ) | __LINK__ linkpath ';' -> ^( __LINK__ linkpath ) );
 
 
-nodeinclusion : kw= KEYWORD_IF formula -> ^( TT_INCLUSIONFORMULA[$kw] formula ) ;
+nodeinclusion :  
+  kw= __IF__ formula -> ^( TT_INCLUSIONFORMULA[$kw] formula ) ;
 
 
-nodetimes : kw= KEYWORD_TIMES formula __AS__ id -> ^( TT_TIMESINFO[$kw] formula id ) ;
+nodetimes :  
+  kw= __TIMES__ formula __AS__ id -> ^( TT_TIMESINFO[$kw] formula id ) ;
 
 
-resultdef : id ( arguments )? COMPARE_EQUAL formula ';' -> ^( TT_RESULTDEF id ( arguments )? formula ) ;
+resultdef :  
+  id ( arguments )? COMPARE_EQUAL formula ';' -> ^( TT_RESULTDEF id ( arguments )? formula ) ;
 
 
-arguments : '(' id ( COMMA id )* ')' -> ^( TT_ARGDEF ( id )* ) ;
+arguments :  
+  '(' id ( ',' id )* ')' -> ^( TT_ARGDEF ( id )* ) ;
 
 
 id : ( ID -> ID |kw= keywordAsId -> ID[((CommonTree)kw.tree).getText()] );
 
 
-keywordAsId : ( __AS__ | __TABLE__ | __TREE__ | __CALC__ | __INPUT__ | __FUNC__ | __NODE__ | KEYWORD_IF | KEYWORD_THEN | KEYWORD_ELSE | KEYWORD_ENDIF | KEYWORD_CASE | KEYWORD_WHEN | KEYWORD_DEFAULT | KEYWORD_ENDCASE | KEYWORD_COLLATE | KEYWORD_EXTRACT | KEYWORD_SUMX | KEYWORD_PRODX | KEYWORD_VECTORX | KEYWORD_CELL | KEYWORD_CELLX | KEYWORD_EXISTS | KEYWORD_INTERPOL | KEYWORD_TABCOLS | KEYWORD_TABROWS | KEYWORD_LOOKUP | KEYWORD_LOOKUPX | KEYWORD_LOOKDOWNX | __FUNC__REF | KEYWORD_DOCALL | KEYWORD_COUNTERLIST );
+keywordAsId : ( __AS__ | __TABLE__ | __TREE__ | __CALC__ | __INPUT__ | __FUNC__ | __NODE__ | __IF__ | __THEN__ | __ELSE__ | __ENDIF__ | __CASE__ | __WHEN__ | __DEFAULT__ | __ENDCASE__ |
+  __COLLATE__ | __EXTRACT__ |
+  __SUMX__ | __PRODX__ | __VEXTORX__ | __CELL__ | __CELLX__ | __EXISTS__ | __INTERPOL__ |
+  __TABCOLS__ | __TABROWS__ |
+  __LOOKUP__ | __LOOKUPX__ | __LOOKDOWNX__ |
+  __FUNCREF__ | __DOCCALL__ | __COUNTERLIST__
+  );
 
 
 constantorid : ( constant | id );
 
 
-tableline : tablecell ( COMMA tablecell )* ';' -> ^( TT_TABLELINE ( tablecell )* ) ;
+tableline : tablecell ( ',' tablecell )* ';' -> ^( TT_TABLELINE ( tablecell )* ) ;
 
 
 tablecell : ( constant | id );
@@ -65,7 +80,7 @@ linkpath : id ( DOT linkpart )* -> ^( TT_NODEPATH id ( linkpart )* ) ;
 linkpart : ( id | STRING | ASTERISK | DOUBLEASTERISK );
 
 
-colnames : colname ( COMMA colname )* -> ^( TT_IDLIST ( colname )* ) ;
+colnames : colname ( ',' colname )* -> ^( TT_IDLIST ( colname )* ) ;
 
 
 colname : ( id | NUMBER | STRING );
@@ -104,7 +119,30 @@ formula9 : formula10 ( POWER ^ formula9 )? ;
 formula10 : ( PLUS ^| MINUS ^)* expression ;
 
 
-expression : ( '(' ! formula ')' !| KEYWORD_SUMX '(' id COMMA formula COMMA formula COMMA formula ')' -> ^( KEYWORD_SUMX id ( formula )* ) | KEYWORD_PRODX '(' id COMMA formula COMMA formula COMMA formula ')' -> ^( KEYWORD_PRODX id ( formula )* ) | KEYWORD_VECTORX '(' id COMMA formula COMMA formula COMMA formula ')' -> ^( KEYWORD_VECTORX id ( formula )* ) | KEYWORD_COLLATE '(' id ( '(' formula ( COMMA formula )* ')' )? ')' -> ^( KEYWORD_COLLATE id ( formula )* ) | KEYWORD_EXTRACT '(' id ( '(' formula ( COMMA formula )* ')' )? COMMA formula ')' -> ^( KEYWORD_EXTRACT id ( formula )* ) | KEYWORD_CELL '(' tableref COMMA range COMMA range ')' -> ^( KEYWORD_CELL tableref ( range )* ) | KEYWORD_CELLX '(' tableref COMMA range COMMA range ')' -> ^( KEYWORD_CELLX tableref ( range )* ) | KEYWORD_LOOKUP '(' tableref COMMA formula ')' -> ^( KEYWORD_LOOKUP tableref ( formula )* ) | KEYWORD_LOOKUPX '(' tableref COMMA formula ( COMMA formula )* ')' -> ^( KEYWORD_LOOKUPX tableref ( formula )* ) | KEYWORD_LOOKDOWNX '(' tableref COMMA formula ( COMMA formula )* ')' -> ^( KEYWORD_LOOKDOWNX tableref ( formula )* ) | KEYWORD_EXISTS '(' tableref COMMA formula ( COMMA formula )* ')' -> ^( KEYWORD_EXISTS tableref ( formula )* ) | KEYWORD_INTERPOL '(' tableref COMMA formula ')' -> ^( KEYWORD_INTERPOL tableref formula ) | KEYWORD_TABCOLS '(' tableref ')' -> ^( KEYWORD_TABCOLS tableref ) | KEYWORD_TABROWS '(' tableref ')' -> ^( KEYWORD_TABROWS tableref ) | __FUNC__REF '(' formula ')' -> ^( __FUNC__REF formula ) | KEYWORD_DOCALL '(' formula ( COMMA formula )* ')' -> ^( KEYWORD_DOCALL ( formula )* ) | KEYWORD_COUNTERLIST '(' id ( COMMA id )* ')' -> ^( KEYWORD_COUNTERLIST ( id )* ) | ID -> ^( TT_USEID ID ) | ID DOT id -> ^( TT_INPUTCALCCALLSIMPLE ID id ) | ID index ( columnaccess )? -> ^( TT_INPUTORTABACCESSWITHINDEX ID index ( columnaccess )? ) | dyntable ( index ( columnaccess )? )? -> ^( TT_DYNTABLE dyntable ( index )? ( columnaccess )? ) | ID parameterListe -> ^( TT_FUNORCALCCALL ID parameterListe ) | ifstmt | casestmt | constant );
+expression : ( '(' ! formula ')' !| __SUMX__ '(' id ',' formula ',' formula ',' formula ')' -> ^( __SUMX__ id ( formula )* ) |  
+  __PRODX__ '(' id ',' formula ',' formula ',' formula ')' -> ^( __PRODX__ id ( formula )* ) |  
+  __VEXTORX__ '(' id ',' formula ',' formula ',' formula ')' -> ^( __VEXTORX__ id ( formula )* ) |  
+  __COLLATE__ '(' id ( '(' formula ( ',' formula )* ')' )? ')' -> ^( __COLLATE__ id ( formula )* ) |  
+  __EXTRACT__ '(' id ( '(' formula ( ',' formula )* ')' )? ',' formula ')' -> ^( __EXTRACT__ id ( formula )* ) |  
+  __CELL__ '(' tableref ',' range ',' range ')' -> ^( __CELL__ tableref ( range )* ) |  
+  __CELLX__ '(' tableref ',' range ',' range ')' -> ^( __CELLX__ tableref ( range )* ) |  
+  __LOOKUP__ '(' tableref ',' formula ')' -> ^( __LOOKUP__ tableref ( formula )* ) |  
+  __LOOKUPX__ '(' tableref ',' formula ( ',' formula )* ')' -> ^( __LOOKUPX__ tableref ( formula )* ) |  
+  __LOOKDOWNX__ '(' tableref ',' formula ( ',' formula )* ')' -> ^( __LOOKDOWNX__ tableref ( formula )* ) |  
+  __EXISTS__ '(' tableref ',' formula ( ',' formula )* ')' -> ^( __EXISTS__ tableref ( formula )* ) |  
+  __INTERPOL__ '(' tableref ',' formula ')' -> ^( __INTERPOL__ tableref formula ) |  
+  __TABCOLS__ '(' tableref ')' -> ^( __TABCOLS__ tableref ) |  
+  __TABROWS__ '(' tableref ')' -> ^( __TABROWS__ tableref ) |  
+  __FUNC__REF '(' formula ')' -> ^( __FUNC__REF formula ) |  
+  __DOCCALL__ '(' formula ( ',' formula )* ')' -> ^( __DOCCALL__ ( formula )* ) |  
+  __COUNTERLIST__ '(' id ( ',' id )* ')' -> ^( __COUNTERLIST__ ( id )* ) |  
+  ID -> ^( TT_USEID ID ) |  
+  ID DOT id -> ^( TT_INPUTCALCCALLSIMPLE ID id ) |  
+  ID index ( columnaccess )? -> ^( TT_INPUTORTABACCESSWITHINDEX ID index ( columnaccess )? ) |  
+  dyntable ( index ( columnaccess )? )? -> ^( TT_DYNTABLE dyntable ( index )? ( columnaccess )? ) |  
+  ID parameterListe -> ^( TT_FUNORCALCCALL ID parameterListe ) |  
+  ifstmt | casestmt | constant  
+  );
 
 
 tableref : ( id | dyntable );
@@ -113,22 +151,25 @@ tableref : ( id | dyntable );
 range : formula ( DOTS formula )? -> ^( TT_RANGE ( formula )* ) ;
 
 
-ifstmt : KEYWORD_IF formula KEYWORD_THEN formula KEYWORD_ELSE formula KEYWORD_ENDIF -> ^( KEYWORD_IF ( formula )* ) ;
+ifstmt : __IF__ formula __THEN__ formula __ELSE__ formula __ENDIF__ -> ^( __IF__ ( formula )* ) ;
 
 
-casestmt : KEYWORD_CASE formula ( casewhen )* ( casedefault )? KEYWORD_ENDCASE -> ^( KEYWORD_CASE formula ( casewhen )* ( casedefault )? ) ;
+casestmt : __CASE__ formula ( casewhen )* ( casedefault )? __ENDCASE__ -> ^( __CASE__ formula ( casewhen )* ( casedefault )? ) ;
 
 
-casewhen : KEYWORD_WHEN casecompares COLON formula -> ^( KEYWORD_WHEN casecompares formula ) ;
+casewhen : __WHEN__ casecompares COLON formula -> ^( __WHEN__ casecompares formula ) ;
 
 
-casecompares : casecompare ( COMMA casecompare )* -> ^( TT_CASECONDITION ( casecompare )* ) ;
+casecompares : casecompare ( ',' casecompare )* -> ^( TT_CASECONDITION ( casecompare )* ) ;
 
 
-casecompare : ( caseconstant -> ^( TT_CASECOMPARISON caseconstant ) | caseconstantnumber DOTS caseconstantnumber -> ^( TT_CASERANGE ( caseconstantnumber )* ) | STRING DOTS STRING -> ^( TT_CASERANGE ( STRING )* ) );
+casecompare :  
+  ( caseconstant -> ^( TT_CASECOMPARISON caseconstant ) |  
+  caseconstantnumber DOTS caseconstantnumber -> ^( TT_CASERANGE ( caseconstantnumber )* ) | STRING DOTS STRING -> ^( TT_CASERANGE ( STRING )* )  
+);
 
 
-casedefault : KEYWORD_DEFAULT COLON formula -> ^( KEYWORD_DEFAULT formula ) ;
+casedefault : __DEFAULT__ COLON formula -> ^( __DEFAULT__ formula ) ;
 
 
 caseconstant : ( STRING | caseconstantnumber );
@@ -146,10 +187,10 @@ columnaccess : ( DOT id -> ^( TT_COLNAMESTATIC id ) | '(' formula ')' -> ^( TT_C
 comparisonoperator : ( COMPARE_EQUAL | COMPARE_EQUAL_CSTYLE | COMPARE_SMALLER | COMPARE_BIGGER | COMPARE_LESSEQUAL | COMPARE_BIGGEREQUAL | COMPARE_NOTEQUAL | COMPARE_NOTEQUAL_CSTYLE | COMPARE_STR_EQUAL | COMPARE_STR_NOTEQUAL | COMPARE_STR_ALIKE | COMPARE_STR_NOTALIKE | COMPARE_STR_BEFORE | COMPARE_STR_NOTBEFORE | COMPARE_STR_AHEAD | COMPARE_STR_NOTAHEAD | COMPARE_STR_BEHIND | COMPARE_STR_NOTBEHIND | COMPARE_STR_AFTER | COMPARE_STR_NOTAFTER );
 
 
-parameterListe : '(' ( formula ( COMMA formula )* )? ')' -> ^( TT_PARAMETERS ( formula )* ) ;
+parameterListe : '(' ( formula ( ',' formula )* )? ')' -> ^( TT_PARAMETERS ( formula )* ) ;
 
 
-index : BRACKET_OPEN formula ( COMMA formula )* BRACKET_CLOSE -> ^( TT_INDEX ( formula )* ) ;
+index : BRACKET_OPEN formula ( ',' formula )* BRACKET_CLOSE -> ^( TT_INDEX ( formula )* ) ;
 
 constant : ( STRING | NUMBER );
 
