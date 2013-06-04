@@ -7,7 +7,7 @@ title: Welcome
 ## What is TreeCalc?
 
 TreeCalc is a programming language with a focus on calculations
-and business rules. The most important features are:
+and business rules. Highlights include:
 
 * easy to learn
 * no side effects
@@ -23,56 +23,88 @@ and business rules. The most important features are:
 
 
 
-## Language - TreeCall Source Language (`.tcs`)
-
-[TreeCall Language Specification](lang/spec.html) - Spec, Grammar
-
 Sample:
 
 ~~~
-TREE mytree {
-  NODE m {
-    NODE maincomputes {
-      NODE sub1;
-      NODE sub2;
-      NODE sub3 {
-        NODE sub31;
-        NODE sub32;
+TREE carinsurance {
+  NODE checks;
+  NODE calculation {
+    NODE car TIMES I_CarCounter {
+      NODE liability;
+      NODE damage IF I_Damage_YN {
+        LINK damage2013;
       }
     }
-    NODE optional_init;
-    NODE optional IF I_INCLUDE_LEVEL1 {
-      NODE opt1;
-      NODE opt2 IF I_include_level2;
-    }
-    NODE funny;
-  }
-  NODE n IF I_include_level1;
-  NODE z {
-      NODE zsub;
   }
 }
 
-INPUT I_INCLUDE_LEVEL1;
-INPUT I_include_level2;
-CALC mytree.n {
-  P_n = "n";
-}
-CALC mytree.z {
-    P_z = "z";
-    P_fac(n) = n<=0 ? 1 : P_Fac(n-1) * n ;
-    P_zsub = P_zsub;
-}                   
-CALC mytree.z.zsub {
-    P_zsub = 1;
-}
-CALC mytree.m.funny {
-    P_Mult(i) = i;
-    P_Mult2(ind) = P_Mult(ind);
+CALC carinsurance.calculation {
+  RX_Prem = R_Prem 
+              * 
+            IF I_Discount_YN THEN
+                 0.8
+            ELSE
+                 1
+            ENDIF;
 }
 
-FUNC F_testfunny(i) = P_Mult(i);
+CALC carinsurance.calculation.car.liability {
+  R_Prem = I_kw * T_Area[I_Area].fact; 
+  ...
+}
+
+CALC damage2013.calculation {
+  R_Prem = ...
+}
+
+TABLE T_Mortality (age, qx, qy) {
+   16, 0.0006380, 0.0003980;
+   17, 0.0007200, 0.0004160;
+   18, 0.0007760, 0.0004060;
+   19, 0.0008060, 0.0003720;
+   20, 0.0008400, 0.0003580;
+    ...
+}
+
+TABLE T_Liability_Sum (key, text) {
+   1, "€  6.000.000,-";
+   2, "€ 12.000.000,-";
+}
+
+FUNC F_LI_Lx(age, sex, risk) = 
+   IF age <= 0 THEN
+      100000
+   ELSE
+      F_LI_Lx(age - 1, sex, risk)
+      * 
+      (1 - F_LI_qx(age - 1, sex, risk))
+   ENDIF
+ ;
+
+FUNC F_LI_qx(age, sex, riskq) = 
+     sex = 1
+     ? min(T_Mortality[age].qx * (1 + riskq), 1)
+     : min(T_Mortality[age].qy * (1 + riskq), 1)
+;
 ~~~
+
+
+## Language - TreeCalc Source Language (`.tcs`)
+
+[TreeCalc Language Specification](lang/spec.html) - Spec, Grammar
+
+#### Data Types
+
+Dynamic conversions + checks
+
+- String
+- Number
+- List
+- Date: String (Y-M-D, D.M.Y, M/D/Y)
+- Boolean: Number (false=0, true=1)
+- Internal: Function ref, Table ref, Null
+
+
 
 
 ## Compiler
@@ -85,6 +117,21 @@ TreeCalc Compiler - code generation for:
 
 
 [More info »](https://github.com/treecalc/compiler)  \|  [API Docs/Javadocs](javadocs/compiler)
+
+
+## Virtual Machine
+
+Sample:
+
+~~~
+case INSTR_ADD: //a b -- a+b
+  stack[sp-1] = V.getInstance(stack[sp-1].doubleValue() + stack[sp].doubleValue());
+  stack[sp--] = null;
+  break;
+~~~
+
+[More info »](https://github.com/treecalc/virtual-machine)  \|  [API Docs/Javadocs](javadocs/virtual-machine)
+
 
 ### Intermediate Language (`.tci`) / TreeCalc Assembler
 
@@ -110,23 +157,7 @@ Sample:
 TBD
 
 
-
-## Virtual Machine
-
-[More info »](https://github.com/treecalc/virtual-machine)  \|  [API Docs/Javadocs](javadocs/virtual-machine)
-
-
-### Instructions / Bytecode (`.tcx`)
-
-Sample:
-
-~~~
-case INSTR_ADD: //a b -- a+b
-  stack[sp-1] = V.getInstance(stack[sp-1].doubleValue() + stack[sp].doubleValue());
-  stack[sp--] = null;
-  break;
-~~~
-
+### Instructions / Bytecode (`.tcx`) / Binary Format
 
 TBD
 
