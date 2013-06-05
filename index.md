@@ -178,8 +178,9 @@ Standard runtime classes:
 
 ## Talks - Slide Decks
 
+- [TreeCalc - Computations in the Insurance business](talks/treecalc-computations-in-the-insurance-business.html) [[PDF]](talks/treecalc-computations-in-the-insurance-business.pdf), Stefan Neubauer, Fa. Hackhofer, 18.4.2013
 - [TreeCalc Virtual Machine](talks/treecalc-vm-intro.html) [[PDF]](talks/treecalc-vm-intro.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012), 28.6.2012
-- [Adaptive Memoization in the TreeCalc VM](talks/treecalc-vm-adaptive-memoization.html)  [[PDF]](talks/treecalc-vm-adaptive-memoization.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012),
+- [Adaptive Memoization in the TreeCalc VM](talks/treecalc-vm-adaptive-memoization.html)  [[PDF]](talks/treecalc-vm-adaptive-memoization.pdf), Stefan Neubauer, TU Wien/Fakultät für Informatik (SS 2012), 24.7.2012
 
 TBD
 
